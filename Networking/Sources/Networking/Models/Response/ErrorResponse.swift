@@ -7,8 +7,14 @@
 
 import Foundation
 
+public enum LoginError {
+    case emailError
+    case passwordError
+    case unknownError
+}
+
 // MARK: - ErrorResponse
-public struct ErrorResponse: Codable {
+public struct ErrorResponse: Codable, Error {
     public let name: String?
     public let message: String?
     public let validationErrors: [ValidationError]?
@@ -28,5 +34,33 @@ public struct ErrorResponse: Codable {
             case message = "Message"
         }
     }
-
+    
+    public var loginError: LoginError {
+        guard let validationErrors = validationErrors else {
+            return .unknownError
+        }
+        
+        for error in validationErrors {
+            switch error.name {
+            case "Email":
+                return .emailError
+            case "Password":
+                return .passwordError
+            case "Login failed":
+                return .unknownError
+            default:
+                break
+            }
+        }
+        
+        return .unknownError
+    }
+    
+    public var emailError: String {
+        return validationErrors?.first(where: { $0.name == "Email"})?.message ?? ""
+    }
+    
+    public var passwordError: String {
+        return validationErrors?.first(where: { $0.name == "Password"})?.message ?? ""
+    }
 }

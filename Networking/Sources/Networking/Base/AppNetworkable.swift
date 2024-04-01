@@ -31,17 +31,18 @@ public extension AppNetworkable {
         return request
     }
     
-    func fetchResponse<V: Decodable>(completion: @escaping ((Result<V, Error>) -> Void)) {
+    func fetchResponse<V: Decodable>(completion: @escaping ((Result<V, ErrorResponse>) -> Void)) {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             DispatchQueue.main.async {
                 guard let data = data else {
-                    completion(.failure(NSError.error(with: "Data error")))
+                    completion(.failure(.init(name: nil, message: "Data error", validationErrors: nil)))
                     return
                 }
                 
                 print("The response is : ",String(data: data, encoding: .utf8)!)
+
                 if let error = error {
-                    completion(.failure(error))
+                    completion(.failure(.init(name: nil, message: error.localizedDescription, validationErrors: nil)))
                 } else {
                     if let httpStatus = response as? HTTPURLResponse {
                         switch httpStatus.statusCode {
@@ -52,20 +53,20 @@ public extension AppNetworkable {
                                 
                             } catch let error as NSError {
                                 print("JSON Decode Error")
-                                completion(.failure(error))
+                                completion(.failure(.init(name: nil, message: error.localizedDescription, validationErrors: nil)))
                             }
                         default:
                             do {
                                 let result = try JSONDecoder().decode(ErrorResponse.self, from: data)
                                 let message = result.validationErrors?.first?.message ?? result.message ?? ""
-                                completion(.failure(NSError.error(with: message)))
+                                completion(.failure(.init(name: result.name, message: result.message, validationErrors: result.validationErrors)))
                                 
                             } catch {
-                                completion(.failure(NSError.error(with: "Https error code: \(httpStatus.statusCode)")))
+                                completion(.failure(.init(name: nil, message: "Https error code: \(httpStatus.statusCode)", validationErrors: nil)))
                             }
                         }
                     } else {
-                        completion(.failure(NSError.error(with: "Https error")))
+                        completion(.failure(.init(name: nil, message: "Https error", validationErrors: nil)))
                     }
                 }
             }

@@ -222,6 +222,8 @@ public struct QuickAddDeposit: Codable {
 public struct Product: Codable {
     public let id: Int?
     public let name: String?
+    public let pngImageUrl: String?
+    public let totalCollection: Double?
     public let categoryType: String?
     public let type: String?
     public let friendlyName: String?
@@ -244,6 +246,8 @@ public struct Product: Codable {
     enum CodingKeys: String, CodingKey {
         case id = "Id"
         case name = "Name"
+        case pngImageUrl = "PngImageUrl"
+        case totalCollection = "TotalCollection"
         case categoryType = "CategoryType"
         case type = "Type"
         case friendlyName = "FriendlyName"

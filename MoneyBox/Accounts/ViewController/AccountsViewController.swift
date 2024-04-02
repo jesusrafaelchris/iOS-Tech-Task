@@ -33,6 +33,7 @@ final class AccountsViewController: UIViewController {
         collectionView.layer.cornerRadius = 10
         collectionView.layer.masksToBounds = false
         collectionView.isScrollEnabled = false
+        collectionView.delegate = self
         collectionView.backgroundColor = .white
         return collectionView
     }()
@@ -85,5 +86,23 @@ final class AccountsViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 250),
         ])
+    }
+}
+
+extension AccountsViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let selectedItem = accountsCompositionalController.dataSource.itemIdentifier(for: indexPath) {
+            print("Selected item: \(selectedItem)")
+            navigateToIndivudualAccount(account: selectedItem)
+        }
+    }
+    
+    func navigateToIndivudualAccount(account: InvestmentViewData) {
+        navigationItem.title = ""
+        navigationController?.pushViewController(
+            IndividualAccountViewController(account: account),
+            animated: true
+        )
     }
 }

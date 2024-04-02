@@ -13,6 +13,7 @@ struct InvestmentViewData: Hashable {
     let earningsNet: Double?
     let earningsAsPercentage: Double?
     let assetBox: String?
+    let productID: Int?
 }
 
 extension ProductResponse {
@@ -28,7 +29,8 @@ extension ProductResponse {
             contributionsNet: investorAccount?.contributionsNet,
             earningsNet: investorAccount?.earningsNet,
             earningsAsPercentage: investorAccount?.earningsAsPercentage,
-            assetBox: assetBox?.title
+            assetBox: assetBox?.title,
+            productID: product?.id
         )
     }
 }

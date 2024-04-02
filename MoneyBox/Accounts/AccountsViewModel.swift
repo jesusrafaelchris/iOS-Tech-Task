@@ -1,14 +1,8 @@
 import Foundation
 import Networking
 
-protocol AccountsViewModelPresenter {
-    func updateContent()
-}
-
 protocol AccountsViewModelProtocol: AnyObject {
     func fetchProducts()
-    var greeting: String { get }
-    var totalValue: String { get }
     var didFetchAccounts: (() -> Void)? { get set }
     var accountsViewData: AccountViewData { get }
 }
@@ -16,7 +10,6 @@ protocol AccountsViewModelProtocol: AnyObject {
 final class AccountsViewModel: AccountsViewModelProtocol {
     
     private let dataProvider: DataProviderProtocol
-    private let sessionManager: SessionManagerProtocol
     private let user: LoginResponse.User
     
     var didFetchAccounts: (() -> Void)?
@@ -28,33 +21,38 @@ final class AccountsViewModel: AccountsViewModelProtocol {
     }
     
     init(dataProvider: DataProviderProtocol,
-         sessionManager: SessionManagerProtocol,
          user: LoginResponse.User
     ) {
         self.dataProvider = dataProvider
-        self.sessionManager = sessionManager
         self.user = user
     }
     
     func fetchProducts() {
-        dataProvider.fetchProducts { result in
+        dataProvider.fetchProducts { [weak self] result in
+            guard let strongSelf = self else { return }
             switch result {
             case .success(let model):
-                print(model)
-                self.accountsViewData = .init(totalPlanValue: model.totalPlanValue, totalEarnings: model.totalEarnings)
+                strongSelf.updateAccountViewData(with: model)
             case .failure(let failure):
                 print(failure.message)
             }
         }
     }
     
-    var greeting: String {
-        guard let name = user.firstName else { return ""}
-        return "\(greetingForTime()) \(name)"
+    private func updateAccountViewData(with model: AccountResponse) {
+        let headerViewData = AccountHeaderViewData(
+            greeting: greeting,
+            totalPlanValue: model.totalPlanValue,
+            totalEarnings: model.totalEarnings,
+            totalContributionsNet: model.totalContributionsNet,
+            totalEarningsAsPercentage: model.totalEarningsAsPercentage
+        )
+        accountsViewData = AccountViewData(headerViewData: headerViewData)
     }
     
-    var totalValue: String {
-        return "\(accountsViewData.formattedTotal)"
+    private var greeting: String {
+        guard let name = user.firstName else { return ""}
+        return "\(greetingForTime()) \(name)"
     }
     
     private func greetingForTime() -> String {

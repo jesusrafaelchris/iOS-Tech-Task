@@ -7,15 +7,6 @@ final class AccountsViewController: UIViewController {
 
     private var viewModel: AccountsViewModelProtocol
     
-    private lazy var greetingLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .darkAccent
-        label.text = viewModel.greeting
-        label.font = .boldSystemFont(ofSize: 18)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
     lazy var header: AccountsHeaderView = {
         let header = AccountsHeaderView()
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -44,22 +35,17 @@ final class AccountsViewController: UIViewController {
     }
     
     func updateUI() {
-        header.configure(
-            totalValue: viewModel.totalValue
-        )
+        guard let headerViewData = viewModel.accountsViewData.headerViewData else { return }
+        header.configure(viewData: headerViewData)
     }
     
     private func setupView() {
-        view.addSubview(greetingLabel)
         view.addSubview(header)
         
         NSLayoutConstraint.activate([
-            
-            greetingLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            greetingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            
-            header.topAnchor.constraint(equalTo: greetingLabel.bottomAnchor, constant: 24),
-            header.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            header.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            header.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
 }

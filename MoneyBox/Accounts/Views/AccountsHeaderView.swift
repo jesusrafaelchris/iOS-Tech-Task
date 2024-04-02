@@ -2,6 +2,14 @@ import UIKit
 
 final class AccountsHeaderView: UIView {
     
+    private lazy var greetingLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .darkAccent
+        label.font = .boldSystemFont(ofSize: 24)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private lazy var totalValueTitle: UILabel = {
         let label = UILabel()
         label.textColor = .darkAccent
@@ -12,7 +20,7 @@ final class AccountsHeaderView: UIView {
     
     private lazy var totalValueLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .darkAccent
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -20,9 +28,11 @@ final class AccountsHeaderView: UIView {
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 4
-        stackView.alignment = .center
+        stackView.alignment = .leading
+        stackView.addArrangedSubview(greetingLabel)
+        stackView.setCustomSpacing(24, after: greetingLabel)
         stackView.addArrangedSubview(totalValueTitle)
+        stackView.setCustomSpacing(8, after: totalValueTitle)
         stackView.addArrangedSubview(totalValueLabel)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -52,7 +62,8 @@ final class AccountsHeaderView: UIView {
         ])
     }
     
-    func configure(totalValue: String) {
-        totalValueLabel.attributedText = totalValue.attributedAccountBalance(biggerFontSize: 40, smallerFontSize: 20)
+    func configure(viewData: AccountHeaderViewData) {
+        totalValueLabel.attributedText = viewData.formattedTotalValue
+        greetingLabel.text = viewData.greeting
     }
 }

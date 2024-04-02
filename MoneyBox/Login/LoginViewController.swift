@@ -93,7 +93,6 @@ class LoginViewController: UIViewController {
                     AccountsViewController(
                         viewModel: AccountsViewModel(
                             dataProvider: strongSelf.viewModel.dataProvider,
-                            sessionManager: strongSelf.viewModel.sessionManager,
                             user: model.user
                         )
                     )

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Networking
 
 class LoginViewController: UIViewController {
     
@@ -82,36 +83,39 @@ class LoginViewController: UIViewController {
         passwordField.reset()
         loginButton.showLoading()
         
-        viewModel.login(email: "test+ios@moneyboxapp.com", password: "P455word12") { [weak self] result in
-            guard let strongSelf = self else { return }
-            switch result {
-            case .success(let model):
-                print("model", model)
-                self?.viewModel.assignSessionToken(token: model.session.bearerToken)
-                strongSelf.loginButton.hideLoading()
-                self?.navigationController?.setViewControllers([
-                    AccountsViewController(
-                        viewModel: AccountsViewModel(
-                            dataProvider: strongSelf.viewModel.dataProvider,
-                            user: model.user
-                        )
-                    )
-                ], animated: true
-                )
-            case .failure(let error):
-                strongSelf.loginButton.hideLoading()
-                switch error.loginError {
-                case .emailError:
-                    strongSelf.emailField.showError(error: error.emailError)
-                case .passwordError:
-                    strongSelf.passwordField.showError(error: error.passwordError)
-                case .unknownError:
-                    // show alert with error.message
-                    print("login failed")
-                    break
-                }
+        viewModel.login(email: "test+ios@moneyboxapp.com", password: "P455word12")
+        
+        viewModel.didSuccessfullyLogin = { [weak self] user in
+            self?.loginButton.hideLoading()
+            self?.navigateToAccounts(user: user)
+        }
+        
+        viewModel.onLoginError = { [weak self] error in
+            self?.loginButton.hideLoading()
+            switch error.loginError {
+            case .emailError:
+                self?.emailField.showError(error: error.emailError)
+            case .passwordError:
+                self?.passwordField.showError(error: error.passwordError)
+            case .unknownError:
+                // show alert with error.message
+                print("login failed")
+                break
             }
         }
+    }
+        
+    func navigateToAccounts(user: LoginResponse.User) {
+        navigationController?.setViewControllers([
+            AccountsViewController(
+                viewModel: AccountsViewModel(
+                    dataProvider: viewModel.dataProvider,
+                    user: user
+                ),
+                accountsCompositionalController: AccountsCompositionalController()
+            )
+        ], animated: true
+        )
     }
     
     // MARK: - Setup

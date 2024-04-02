@@ -2,8 +2,9 @@ import UIKit
 import Networking
 
 protocol LoginViewModelProtocol: AnyObject, LoginTextFieldDelegate {
-    func login(email: String?, password: String?, completion: @escaping (LoginCompletion))
-    func assignSessionToken(token: String)
+    func login(email: String?, password: String?)
+    var didSuccessfullyLogin: ((LoginResponse.User) -> Void)? { get set }
+    var onLoginError: ((ErrorResponse) -> Void)? { get set }
     var dataProvider: DataProviderProtocol { get }
     var sessionManager: SessionManagerProtocol { get }
 }
@@ -13,6 +14,9 @@ final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
     var dataProvider: DataProviderProtocol
     var sessionManager: SessionManagerProtocol
     
+    var didSuccessfullyLogin: ((LoginResponse.User) -> Void)?
+    var onLoginError: ((ErrorResponse) -> Void)?
+
     init(dataProvider: DataProviderProtocol,
          sessionManager: SessionManagerProtocol
     ) {
@@ -20,7 +24,7 @@ final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
         self.sessionManager = sessionManager
     }
     
-    func login(email: String?, password: String?, completion: @escaping (LoginCompletion)) {
+    func login(email: String?, password: String?) {
         guard
             let email = email,
             let password = password
@@ -28,19 +32,16 @@ final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
         
         let loginRequest = LoginRequest(email: email, password: password)
         
-//        dataProvider.login(request: loginRequest) { result in
-//            switch result {
-//            case .success(let success):
-//                print(success)
-//                self?.sessionManager.setUserToken(success.session.bearerToken)
-//                
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//            completion(result)
-//        }
-        
-        dataProvider.login(request: loginRequest, completion: completion)
+        dataProvider.login(request: loginRequest) { [weak self] result in
+            switch result {
+            case .success(let success):
+                print(success)
+                self?.sessionManager.setUserToken(success.session.bearerToken)
+                self?.didSuccessfullyLogin?(success.user)
+            case .failure(let error):
+                self?.onLoginError?(error)
+            }
+        }
     }
     
     func assignSessionToken(token: String) {

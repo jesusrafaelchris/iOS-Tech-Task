@@ -6,7 +6,7 @@ final class AccountsViewController: UIViewController {
     // MARK: Properties
     
     private var viewModel: AccountsViewModelProtocol
-    private var dataSource: UICollectionViewDiffableDataSource<Int, InvestmentViewData>!
+    private var accountsCompositionalController: AccountsCompositionalControllerProtocol
     
     lazy var header: AccountsHeaderView = {
         let header = AccountsHeaderView()
@@ -37,8 +37,12 @@ final class AccountsViewController: UIViewController {
         return collectionView
     }()
     
-    init(viewModel: AccountsViewModelProtocol) {
+    init(
+        viewModel: AccountsViewModelProtocol,
+        accountsCompositionalController: AccountsCompositionalControllerProtocol
+    ) {
         self.viewModel = viewModel
+        self.accountsCompositionalController = accountsCompositionalController
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,7 +54,7 @@ final class AccountsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupView()
-        configureDataSource()
+        accountsCompositionalController.configureDataSource(collectionView: collectionView)
         viewModel.fetchProducts()
         
         viewModel.didFetchAccounts = { [weak self] in
@@ -62,10 +66,9 @@ final class AccountsViewController: UIViewController {
         guard let headerViewData = viewModel.accountsViewData.headerViewData else { return }
         header.configure(viewData: headerViewData)
         
-        var snapshot = NSDiffableDataSourceSnapshot<Int, InvestmentViewData>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.accountsViewData.investmentViewData ?? [])
-        dataSource.apply(snapshot, animatingDifferences: true)
+        accountsCompositionalController.applySnapshot(
+            items: viewModel.accountsViewData.investmentViewData ?? []
+        )
     }
     
     private func setupView() {
@@ -82,24 +85,5 @@ final class AccountsViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 250),
         ])
-    }
-    
-    private func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<AccountCell, InvestmentViewData> { cell, indexPath, investment in
-            cell.configure(viewData: investment)
-        }
-        
-        let supplementaryViewRegistration = UICollectionView.SupplementaryRegistration<AccountSectionHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
-            supplementaryView.configure(title: "Your Accounts")
-        }
-        
-        dataSource = UICollectionViewDiffableDataSource<Int, InvestmentViewData>(collectionView: collectionView) {
-            collectionView, indexPath, investment in
-            collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: investment)
-        }
-        
-        dataSource.supplementaryViewProvider = { collectionView, elementKind, indexPath in
-            collectionView.dequeueConfiguredReusableSupplementary(using: supplementaryViewRegistration, for: indexPath)
-        }
     }
 }

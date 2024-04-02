@@ -129,7 +129,7 @@ final class AccountsHeaderView: UIView {
         stackView.addArrangedSubview(totalValueTitle)
         stackView.setCustomSpacing(4, after: totalValueTitle)
         stackView.addArrangedSubview(valueStackView)
-        stackView.setCustomSpacing(32, after: valueStackView)
+        stackView.setCustomSpacing(24, after: valueStackView)
         //stackView.addArrangedSubview(percentageGainLabel)
         //stackView.setCustomSpacing(12, after: percentageGainLabel)
         stackView.addArrangedSubview(actionStackView)
@@ -165,19 +165,6 @@ final class AccountsHeaderView: UIView {
         ])
     }
     
-    struct ActionModel {
-        let label: String
-        let amount: String
-    }
-    
-    let actions: [ActionModel] = [
-        .init(label: "Add £1", amount: "1"),
-        .init(label: "Add £2", amount: "2"),
-        .init(label: "Add £5", amount: "5"),
-        .init(label: "Add £10", amount: "10"),
-        .init(label: "Custom", amount: "+"),
-    
-    ]
     func configure(viewData: AccountHeaderViewData) {
         totalValueTitle.text = "TOTAL BALANCE"
         logoImage.image = UIImage(named: "moneyBoxLogo")
@@ -187,7 +174,7 @@ final class AccountsHeaderView: UIView {
         greetingLabel.text = viewData.greeting
         dailyMessage.text = "Little and often is the best way to save. \r\nAdd a little extra to your Moneybox."
         percentageGainLabel.configure(percentage: "\(viewData.totalEarningsAsPercentage ?? 0.0)%")
-        actions.forEach({
+        viewData.actions.forEach({
             let actionButton = ActionButton()
             actionButton.configure(amount: $0.amount, label: $0.label)
             actionStackView.addArrangedSubview(actionButton)

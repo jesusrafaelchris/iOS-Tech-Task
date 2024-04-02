@@ -15,7 +15,7 @@ class AccountCell: UICollectionViewCell {
     private lazy var name: UILabel = {
         let label = UILabel()
         label.textColor = .darkAccent
-        label.font = .systemFont(ofSize: 15)
+        label.font = .boldSystemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

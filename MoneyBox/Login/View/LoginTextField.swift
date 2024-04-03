@@ -94,6 +94,9 @@ final class LoginTextField: UIView {
         textField.isSecureTextEntry = isSecure
         textField.returnKeyType = isSecure ? .done : .next
         textField.tag = tag
+        if isSecure {
+            addShowPasswordButton()
+        }
         
         setupA11y(title, isSecure)
     }
@@ -119,6 +122,21 @@ final class LoginTextField: UIView {
         stackView.accessibilityElements = [titleLabel, textField, errorMessage]
         textField.accessibilityLabel = isSecure ? "Password Field" : "Email Field"
         titleLabel.accessibilityLabel = title
+    }
+    
+    func addShowPasswordButton() {
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        button.setImage(UIImage(systemName: "eye.fill")?.withTintColor(.accent ?? .black), for: .normal)
+        button.setImage(UIImage(systemName: "eye.slash.fill")?.withTintColor(.accent ?? .black), for: .selected)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
+        textField.rightView = button
+        textField.rightViewMode = .always
+        button.addTarget(self, action: #selector(showHidePassword(_:)), for: .touchUpInside)
+    }
+    
+    @objc private func showHidePassword(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        textField.isSecureTextEntry = !sender.isSelected
     }
 }
 

@@ -29,8 +29,8 @@ class AccountCell: UICollectionViewCell {
     
     private lazy var percentage: UILabel = {
         let label = UILabel()
-        label.textColor = .secondaryLabel//UIColor(red: 0.20, green: 0.78, blue: 0.35, alpha: 1.00)
-        label.font = .boldSystemFont(ofSize: 14)
+        label.textColor = .darkAccent//UIColor(red: 0.20, green: 0.78, blue: 0.35, alpha: 1.00)
+        label.font = .systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

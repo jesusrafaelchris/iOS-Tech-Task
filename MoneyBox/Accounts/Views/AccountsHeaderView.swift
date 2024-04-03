@@ -18,7 +18,7 @@ final class AccountsHeaderView: UIView {
         label.font = .boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isAccessibilityElement = true
-        label.accessibilityTraits = .staticText
+        label.accessibilityTraits = .header
         return label
     }()
     

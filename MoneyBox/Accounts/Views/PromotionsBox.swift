@@ -7,6 +7,7 @@ class PromotionsBox: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.masksToBounds = true
+        view.isAccessibilityElement = false
         return view
     }()
     
@@ -15,6 +16,7 @@ class PromotionsBox: UIView {
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: "moneyboxLighthouse")
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isAccessibilityElement = false
         return imageView
     }()
     
@@ -25,6 +27,7 @@ class PromotionsBox: UIView {
         label.text = "Pension Calculator"
         label.font = .boldSystemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = false
         return label
     }()
     
@@ -36,6 +39,7 @@ class PromotionsBox: UIView {
         label.font = .boldSystemFont(ofSize: 24)
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = false
         return label
     }()
     
@@ -45,6 +49,7 @@ class PromotionsBox: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "arrow.right", withConfiguration: configuration), for: .normal)
         button.tintColor = .white
+        button.isAccessibilityElement = false
         return button
     }()
     
@@ -59,12 +64,14 @@ class PromotionsBox: UIView {
         stackView.alignment = .leading
         stackView.distribution = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        setupA11y()
     }
     
     required init?(coder: NSCoder) {
@@ -84,9 +91,6 @@ class PromotionsBox: UIView {
         layer.shadowRadius = 4
         layer.cornerRadius = 10
         layer.masksToBounds = false
-        clipsToBounds = true
-        isAccessibilityElement = false
-        shouldGroupAccessibilityChildren = true
         translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -104,5 +108,13 @@ class PromotionsBox: UIView {
             promotionImage.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 32),
             promotionImage.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
+    }
+    
+    func setupA11y() {
+        isAccessibilityElement = true
+        shouldGroupAccessibilityChildren = true
+        
+        accessibilityLabel = "Pension Calculator, get on track for\nlife after work"
+        accessibilityHint = "Tap to view more"
     }
 }

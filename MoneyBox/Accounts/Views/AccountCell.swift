@@ -35,14 +35,17 @@ class AccountCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var chevronImageView: UIImageView = {
+    private lazy var chevronImageView: UIButton = {
         let configuration = UIImage.SymbolConfiguration(weight: .bold)
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "chevron.right", withConfiguration: configuration)
-        imageView.tintColor = .mediumAccent
-        return imageView
+        let button = UIButton()
+        button.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "chevron.right", withConfiguration: configuration), for: .normal)
+        button.tintColor = .mediumAccent
+        button.isAccessibilityElement = true
+        button.accessibilityLabel = "More options"
+        button.accessibilityTraits = .button
+        return button
     }()
     
     private lazy var stackView: UIStackView = {
@@ -115,6 +118,5 @@ class AccountCell: UICollectionViewCell {
         name.isAccessibilityElement = false
         value.isAccessibilityElement = false
         percentage.isAccessibilityElement = false
-        chevronImageView.isAccessibilityElement = false
     }
 }

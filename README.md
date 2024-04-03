@@ -27,13 +27,13 @@ Extensive unit testing is conducted on the ViewModels to ensure their functional
 - The tests are broken into each part of the app it tests
 
 
-<img width="224" alt="Screenshot 2024-04-03 at 15 17 43" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/32fd8407-0e04-457b-a50c-dfd210d05e5c">
+<img height="80" alt="Screenshot 2024-04-03 at 15 17 43" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/32fd8407-0e04-457b-a50c-dfd210d05e5c">
 
-<img width="223" alt="Screenshot 2024-04-03 at 15 17 50" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/6856c56f-ff5e-43fb-abd4-cf5dbfed1564">
+<img height="80" alt="Screenshot 2024-04-03 at 15 17 50" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/6856c56f-ff5e-43fb-abd4-cf5dbfed1564">
 
-<img width="223" alt="Screenshot 2024-04-03 at 15 17 56" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/92abbe2d-9300-4f2c-a8b5-10bf41934eb7">
+<img height="80" alt="Screenshot 2024-04-03 at 15 17 56" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/92abbe2d-9300-4f2c-a8b5-10bf41934eb7">
 
-<img width="229" alt="Screenshot 2024-04-03 at 15 18 00" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/e061f016-acb1-479b-9659-60854a11bfa7">
+<img height="80" alt="Screenshot 2024-04-03 at 15 18 00" src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/e061f016-acb1-479b-9659-60854a11bfa7">
 
 
 ## Accessibility

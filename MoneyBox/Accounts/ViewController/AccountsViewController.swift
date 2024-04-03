@@ -14,17 +14,8 @@ final class AccountsViewController: UIViewController {
         return header
     }()
     
-    lazy var promotionsBox: UIView = {
-        let view = UIView()
-        view.backgroundColor = .darkAccent
-        view.layer.shadowColor = UIColor.gray.cgColor
-        view.layer.shadowOpacity = 0.25
-        view.layer.shadowOffset = CGSize(width: 0, height: 0)
-        view.layer.shadowRadius = 4
-        view.layer.cornerRadius = 10
-        view.layer.masksToBounds = false
-        view.isAccessibilityElement = false
-        view.shouldGroupAccessibilityChildren = true
+    lazy var promotionsBox: PromotionsBox = {
+        let view = PromotionsBox()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -102,7 +93,7 @@ final class AccountsViewController: UIViewController {
             promotionsBox.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 32),
             promotionsBox.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             promotionsBox.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            promotionsBox.heightAnchor.constraint(equalToConstant: 200),
+            promotionsBox.heightAnchor.constraint(equalToConstant: 150),
             
             collectionView.topAnchor.constraint(equalTo: promotionsBox.bottomAnchor, constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),

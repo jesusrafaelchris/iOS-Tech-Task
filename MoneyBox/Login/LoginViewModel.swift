@@ -1,12 +1,17 @@
 import UIKit
 import Networking
 
+public protocol LoginViewModelDelegate: AnyObject {
+    func loginTextFieldDidBeginEditing(_ textField: UITextField)
+}
+
 public protocol LoginViewModelProtocol: LoginTextFieldDelegate {
     func login(email: String, password: String)
     var didSuccessfullyLogin: ((LoginResponse.User) -> Void)? { get set }
     var onLoginError: ((ErrorResponse) -> Void)? { get set }
     var dataProvider: DataProviderProtocol { get }
     var sessionManager: SessionManagerProtocol { get }
+    var delegate: LoginViewModelDelegate? { get set }
 }
 
 final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
@@ -16,6 +21,8 @@ final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
     
     var didSuccessfullyLogin: ((LoginResponse.User) -> Void)?
     var onLoginError: ((ErrorResponse) -> Void)?
+    
+    weak var delegate: LoginViewModelDelegate?
 
     init(dataProvider: DataProviderProtocol = DataProvider(),
          sessionManager: SessionManagerProtocol = SessionManager()
@@ -43,7 +50,7 @@ final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
         textField.resignFirstResponder()
     }
     
-    func loginTextFieldDidChange(_ textField: UITextField) {
-        print(textField.text)
+    func loginTextFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.loginTextFieldDidBeginEditing(textField)
     }
 }

@@ -77,23 +77,29 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupView()
+        handleLoginErrors()
+        handleSuccessfulLogin()
+        viewModel.delegate = self
     }
     
     // MARK: - Action
     
-    @objc func login() {
-        emailField.reset()
-        passwordField.reset()
+    @objc private func login() {
+        resetErrors()
         loginButton.showLoading()
         
-        //viewModel.login(email: emailField.text, password: passwordField.text)
-        viewModel.login(email: "test+ios@moneyboxapp.com", password: "P455word12")
-        
+        viewModel.login(email: emailField.text, password: passwordField.text)
+        //viewModel.login(email: "test+ios@moneyboxapp.com", password: "P455word12")
+    }
+    
+    func handleSuccessfulLogin() {
         viewModel.didSuccessfullyLogin = { [weak self] user in
             self?.loginButton.hideLoading()
             self?.navigateToAccounts(user: user)
         }
-        
+    }
+    
+    func handleLoginErrors() {
         viewModel.onLoginError = { [weak self] error in
             self?.loginButton.hideLoading()
             switch error.loginError {
@@ -107,13 +113,13 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func showErrorAlert(error: ErrorResponse) {
+    private func showErrorAlert(error: ErrorResponse) {
         let alert = UIAlertController(title: error.name, message: error.message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
         
-    func navigateToAccounts(user: LoginResponse.User) {
+    private func navigateToAccounts(user: LoginResponse.User) {
         navigationController?.setViewControllers([
             AccountsViewController(
                 viewModel: AccountsViewModel(user: user),
@@ -146,5 +152,17 @@ class LoginViewController: UIViewController {
             loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalPadding),
             loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalPadding)
         ])
+    }
+}
+
+extension LoginViewController: LoginViewModelDelegate {
+    
+    func loginTextFieldDidBeginEditing(_ textField: UITextField) {
+        resetErrors()
+    }
+    
+    private func resetErrors() {
+        emailField.reset()
+        passwordField.reset()
     }
 }

@@ -5,7 +5,7 @@ var vSpinner : UIView?
 extension UIViewController {
     func showSpinner(onView: UIView) {
         let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = .black.withAlphaComponent(0.1)
+        spinnerView.backgroundColor = .white//black.withAlphaComponent(0.1)
         let activityIndicator = UIActivityIndicatorView.init(style: .medium)
         activityIndicator.startAnimating()
         activityIndicator.color = .accent

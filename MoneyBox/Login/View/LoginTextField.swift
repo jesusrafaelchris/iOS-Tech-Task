@@ -2,7 +2,7 @@ import UIKit
 
 public protocol LoginTextFieldDelegate: AnyObject {
     func loginTextFieldDidReturn(_ textField: UITextField)
-    func loginTextFieldDidChange(_ textField: UITextField)
+    func loginTextFieldDidBeginEditing(_ textField: UITextField)
 }
 
 final class LoginTextField: UIView {
@@ -125,12 +125,14 @@ final class LoginTextField: UIView {
 // MARK: - UITextFieldDelegate
 
 extension LoginTextField: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         delegate?.loginTextFieldDidReturn(textField)
         return true
     }
     
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        delegate?.loginTextFieldDidChange(textField)
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        delegate?.loginTextFieldDidBeginEditing(textField)
+        return true
     }
 }

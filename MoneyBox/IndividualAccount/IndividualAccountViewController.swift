@@ -51,8 +51,7 @@ final class IndividualAccountViewController: UIViewController {
         configuration.cornerStyle = .capsule
         configuration.baseForegroundColor = UIColor.white
         configuration.buttonSize = .small
-        configuration.image = UIImage(systemName: "plus.circle.fill")?.withTintColor(.white)
-        configuration.title = "Add Money"
+        configuration.attributedTitle = AttributedString("Add Money", attributes: AttributeContainer([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)]))
         configuration.imagePadding = 4
         let button = UIButton(configuration: configuration, primaryAction: nil)
         button.addTarget(self, action: #selector(addMoney), for: .touchUpInside)
@@ -68,8 +67,7 @@ final class IndividualAccountViewController: UIViewController {
         configuration.cornerStyle = .capsule
         configuration.baseForegroundColor = UIColor.accent
         configuration.buttonSize = .small
-        configuration.image = UIImage(systemName: "minus.circle.fill")?.withTintColor(.white)
-        configuration.title = "Withdraw"
+        configuration.attributedTitle = AttributedString("Withdraw", attributes: AttributeContainer([NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 14)]))
         configuration.imagePadding = 4
         let button = UIButton(configuration: configuration, primaryAction: nil)
         button.translatesAutoresizingMaskIntoConstraints = false

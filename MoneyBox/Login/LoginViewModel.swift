@@ -17,8 +17,8 @@ final class LoginViewModel: LoginViewModelProtocol, LoginTextFieldDelegate {
     var didSuccessfullyLogin: ((LoginResponse.User) -> Void)?
     var onLoginError: ((ErrorResponse) -> Void)?
 
-    init(dataProvider: DataProviderProtocol,
-         sessionManager: SessionManagerProtocol
+    init(dataProvider: DataProviderProtocol = DataProvider(),
+         sessionManager: SessionManagerProtocol = SessionManager()
     ) {
         self.dataProvider = dataProvider
         self.sessionManager = sessionManager

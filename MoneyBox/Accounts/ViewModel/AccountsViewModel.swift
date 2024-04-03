@@ -34,7 +34,7 @@ final class AccountsViewModel: AccountsViewModelProtocol {
     }
     
     init(
-        dataProvider: DataProviderProtocol,
+        dataProvider: DataProviderProtocol = DataProvider(),
         user: LoginResponse.User
     ) {
         self.dataProvider = dataProvider

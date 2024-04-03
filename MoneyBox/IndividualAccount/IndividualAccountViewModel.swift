@@ -18,7 +18,7 @@ final class IndividualAccountViewModel: IndividualAccountViewModelProtocol {
     var addMoneyFailure: ((String?) -> Void)?
     
     init(
-        dataProvider: DataProviderProtocol,
+        dataProvider: DataProviderProtocol = DataProvider(),
         account: InvestmentViewData
     ) {
         self.dataProvider = dataProvider

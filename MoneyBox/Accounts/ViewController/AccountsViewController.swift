@@ -137,9 +137,7 @@ extension AccountsViewController: UICollectionViewDelegate {
         navigationItem.title = ""
         navigationController?.pushViewController(
             IndividualAccountViewController(
-                viewModel: 
-                    IndividualAccountViewModel(
-                    dataProvider: viewModel.dataProvider,
+                viewModel: IndividualAccountViewModel(
                     account: account
                 )
             ),

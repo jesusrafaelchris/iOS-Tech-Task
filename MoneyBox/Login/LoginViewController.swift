@@ -102,20 +102,21 @@ class LoginViewController: UIViewController {
             case .passwordError:
                 self?.passwordField.showError(error: error.passwordError)
             case .unknownError:
-                let alert = UIAlertController(title: error.name, message: error.message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self?.present(alert, animated: true, completion: nil)
+                self?.showErrorAlert(error: error)
             }
         }
+    }
+    
+    func showErrorAlert(error: ErrorResponse) {
+        let alert = UIAlertController(title: error.name, message: error.message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
         
     func navigateToAccounts(user: LoginResponse.User) {
         navigationController?.setViewControllers([
             AccountsViewController(
-                viewModel: AccountsViewModel(
-                    dataProvider: viewModel.dataProvider,
-                    user: user
-                ),
+                viewModel: AccountsViewModel(user: user),
                 accountsCompositionalController: AccountsCompositionalController()
             )
         ], animated: true

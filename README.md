@@ -3,7 +3,7 @@
 ## Overview
 Below is my submission for the Moneybox iOS technical challenge.
 
-<img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/d334dca9-d0cc-42f2-b96c-0859a2ffb34f" height="500" /><img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/3da5c3a9-6734-4a08-9f24-b0dd030cf77a" height="500" /><img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/8df5f00d-ec88-48bb-b834-c9cac15e6451" height="500" /><img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/d8569759-d651-41a9-9d6b-d0fb711a24f7" height="500" />
+<img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/d334dca9-d0cc-42f2-b96c-0859a2ffb34f" height="400" /><img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/3da5c3a9-6734-4a08-9f24-b0dd030cf77a" height="400" /><img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/8df5f00d-ec88-48bb-b834-c9cac15e6451" height="400" /><img src="https://github.com/jesusrafaelchris/iOS-Tech-Task/assets/22798773/d8569759-d651-41a9-9d6b-d0fb711a24f7" height="400" />
 
 ## Technologies
 The app is built using UIKit and programmatic UI with AutoLayout for creating its screens.

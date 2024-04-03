@@ -28,12 +28,12 @@ final class ImageDownloaderTests: XCTestCase {
     func testImageReturnsDataIfSuccessful() async throws {
         // Given
         let expectedImage = UIImage(named: "moneyBoxLogo")!
-        let url = URL(string: "https://example.com/image.jpg")!
+        let url = "https://example.com/image.jpg"
         let imageData = expectedImage.pngData()!
         mockURLSession.result = .success(imageData)
-        
+
         // When
-        let downloadedImage = try await sut.downloadImage(from: url.absoluteString)
+        let downloadedImage = try await sut.downloadImage(from: url)
         
         // Then
         XCTAssertEqual(downloadedImage.pngData(), expectedImage.pngData())

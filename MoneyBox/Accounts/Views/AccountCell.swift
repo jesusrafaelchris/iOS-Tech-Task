@@ -92,8 +92,6 @@ class AccountCell: UICollectionViewCell {
     }
     
     func configure(viewData: InvestmentViewData) {
-        print(viewData)
-        
         name.text = viewData.friendlyName
         value.attributedText = viewData.planValue?.formattedBalance(biggerFontSize: 20, smallerFontSize: 16)
         percentage.text = "\(viewData.earningsAsPercentage ?? 0.0)%"

@@ -7,6 +7,7 @@ final class AccountsViewController: UIViewController {
     
     private var viewModel: AccountsViewModelProtocol
     private var accountsCompositionalController: AccountsCompositionalControllerProtocol
+    var activityIndicator = UIActivityIndicatorView(style: .large)
     
     lazy var header: AccountsHeaderView = {
         let header = AccountsHeaderView()
@@ -62,22 +63,43 @@ final class AccountsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupView()
         accountsCompositionalController.configureDataSource(collectionView: collectionView)
         viewModel.fetchProducts()
         
-        viewModel.didFetchAccounts = { [weak self] in
-            self?.updateUI()
+        viewModel.fetchStateDidChange = { [weak self] state in
+            DispatchQueue.main.async {
+                self?.updateUI(for: state)
+            }
         }
     }
     
-    func updateUI() {
+    func updateUI(for state: FetchState) {
+        switch state {
+        case .loading:
+            self.showSpinner(onView: view)
+        case .success:
+            configureData()
+        case .failure(let errorMessage):
+            showErrorAlert(message: errorMessage)
+        }
+    }
+
+    func configureData() {
+        removeSpinner()
         guard let headerViewData = viewModel.accountsViewData.headerViewData else { return }
         header.configure(viewData: headerViewData)
         
         accountsCompositionalController.applySnapshot(
             items: viewModel.accountsViewData.investmentViewData ?? []
         )
+        setupView()
+    }
+    
+    func showErrorAlert(message: String?) {
+        removeSpinner()
+        let alert = UIAlertController(title: "Oops!", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func setupView() {

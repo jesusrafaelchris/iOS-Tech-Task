@@ -1,10 +1,14 @@
 import UIKit
 import Networking
+enum FetchState {
+    case loading
+    case success
+    case failure(String?)
+}
 
 protocol AccountsViewModelProtocol: AnyObject {
     func fetchProducts()
-    var didFetchAccounts: (() -> Void)? { get set }
-    var onFetchError: ((String?) -> Void)? { get set }
+    var fetchStateDidChange: ((FetchState) -> Void)? { get set }
     var accountsViewData: AccountViewData { get }
     var dataProvider: DataProviderProtocol { get }
     func greetingForTime() -> String
@@ -15,13 +19,17 @@ final class AccountsViewModel: AccountsViewModelProtocol {
     let dataProvider: DataProviderProtocol
     private let user: LoginResponse.User
     
-    var didFetchAccounts: (() -> Void)?
+    var fetchStateDidChange: ((FetchState) -> Void)?
     
-    var onFetchError: ((String?) -> Void)?
-
+    private var fetchState: FetchState = .loading {
+        didSet {
+            fetchStateDidChange?(fetchState)
+        }
+    }
+    
     var accountsViewData = AccountViewData() {
         didSet {
-            didFetchAccounts?()
+            fetchState = .success
         }
     }
     
@@ -34,13 +42,16 @@ final class AccountsViewModel: AccountsViewModelProtocol {
     }
     
     func fetchProducts() {
+        DispatchQueue.main.async {
+            self.fetchState = .loading
+        }
         dataProvider.fetchProducts { [weak self] result in
             guard let strongSelf = self else { return }
             switch result {
             case .success(let model):
                 strongSelf.updateAccountViewData(with: model)
             case .failure(let failure):
-                strongSelf.onFetchError?(failure.message)
+                strongSelf.fetchState = .failure(failure.message)
             }
         }
     }

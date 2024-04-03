@@ -37,6 +37,7 @@
 		804F87A42BBD559A00D8140A /* URLSession+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804F87A32BBD559A00D8140A /* URLSession+Ext.swift */; };
 		804F87A62BBD56FA00D8140A /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804F87A52BBD56FA00D8140A /* MockURLSession.swift */; };
 		804F87AA2BBD6EC700D8140A /* PromotionsBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804F87A92BBD6EC700D8140A /* PromotionsBox.swift */; };
+		804F87AC2BBD7E3600D8140A /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804F87AB2BBD7E3600D8140A /* UIViewController+Ext.swift */; };
 		B228EA6B2880B30B00B35F16 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B228EA692880B30B00B35F16 /* LoginViewController.swift */; };
 		B26EF47828881E7F003BFDF2 /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = B26EF47728881E7F003BFDF2 /* Networking */; };
 		B2CA46CC279350880041B3A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CA46CB279350880041B3A5 /* AppDelegate.swift */; };
@@ -88,6 +89,7 @@
 		804F87A32BBD559A00D8140A /* URLSession+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Ext.swift"; sourceTree = "<group>"; };
 		804F87A52BBD56FA00D8140A /* MockURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLSession.swift; sourceTree = "<group>"; };
 		804F87A92BBD6EC700D8140A /* PromotionsBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromotionsBox.swift; sourceTree = "<group>"; };
+		804F87AB2BBD7E3600D8140A /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		B228EA692880B30B00B35F16 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B24EED92288ED5740016C233 /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		B2CA46C8279350880041B3A5 /* MoneyBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +139,7 @@
 				804F87802BBC14D700D8140A /* Double+Ext.swift */,
 				804F878B2BBC5D5100D8140A /* UIImage+Ext.swift */,
 				804F87A32BBD559A00D8140A /* URLSession+Ext.swift */,
+				804F87AB2BBD7E3600D8140A /* UIViewController+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 				804F87A42BBD559A00D8140A /* URLSession+Ext.swift in Sources */,
 				804F875F2BBB138E00D8140A /* UIColor+Ext.swift in Sources */,
 				804F87812BBC14D800D8140A /* Double+Ext.swift in Sources */,
+				804F87AC2BBD7E3600D8140A /* UIViewController+Ext.swift in Sources */,
 				804F87712BBB585B00D8140A /* UIString+Ext.swift in Sources */,
 				804F877C2BBC097E00D8140A /* AccountCell.swift in Sources */,
 				804F877F2BBC113300D8140A /* ImageDownloader.swift in Sources */,

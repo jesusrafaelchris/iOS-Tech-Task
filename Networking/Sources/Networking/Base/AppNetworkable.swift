@@ -39,7 +39,7 @@ public extension AppNetworkable {
                     return
                 }
                 
-                print("The response is : ",String(data: data, encoding: .utf8)!)
+                //print("The response is : ",String(data: data, encoding: .utf8)!)
 
                 if let error = error {
                     completion(.failure(.init(name: nil, message: error.localizedDescription, validationErrors: nil)))

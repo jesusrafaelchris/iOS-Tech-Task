@@ -29,7 +29,6 @@ final class AccountsViewModelTests: XCTestCase {
         
         // Then
         XCTAssertEqual(sut.accountsViewData.headerViewData?.greeting,  "\(sut.greetingForTime()), \(mockUser.firstName ?? "")")
-        XCTAssertNil(sut.onFetchError)
     }
     
     func testFetchProductSetsHeaderViewData() throws {
@@ -41,7 +40,6 @@ final class AccountsViewModelTests: XCTestCase {
         
         // Then
         XCTAssertNotNil(sut.accountsViewData.headerViewData)
-        XCTAssertNil(sut.onFetchError)
     }
     
     func testFetchProductSetsInvestmentViewData() throws {
@@ -53,24 +51,54 @@ final class AccountsViewModelTests: XCTestCase {
         
         // Then
         XCTAssertNotNil(sut.accountsViewData.investmentViewData)
-        XCTAssertNil(sut.onFetchError)
     }
     
-    func testFetchProductWithErrorCallsOnFetchError() throws {
+    func testFetchProductWithErrorGivesFailureState() throws {
         // Given
         dataProviderMock.fetchProductsResult = .failure(.init(name: "", message: "Test Error", validationErrors: nil))
+        let expectation = XCTestExpectation(description: "Failure State")
         
         // When
-        sut.fetchProducts()
+        sut.fetchStateDidChange = { state in
+            switch state {
+            case .failure(let errorMessage):
+                XCTAssertEqual(errorMessage, "Test Error")
+                expectation.fulfill()
+            case .loading:
+                XCTFail("Method should fail")
+            case .success:
+                XCTFail("Method should fail")
+            }
+        }
         
         // Then
-        XCTAssertNil(sut.accountsViewData.headerViewData)
-        XCTAssertNil(sut.accountsViewData.investmentViewData)
-        XCTAssertNil(sut.didFetchAccounts)
+        sut.fetchProducts()
         
-        sut.onFetchError = { error in
-            XCTAssertEqual(error, "Test Error")
+        wait(for: [expectation], timeout: 5)
+    }
+    
+    func testFetchProductWithSuccessGivesSuccessState() throws {
+        // Given
+        dataProviderMock.fetchProductsResult = .success(AccountResponse.mockData)
+        let expectation = XCTestExpectation(description: "Success State")
+        
+        // When
+        sut.fetchStateDidChange = { state in
+            switch state {
+            case .failure:
+                XCTFail("Method should fail")
+            case .loading:
+                XCTFail("Method should fail")
+            case .success:
+                XCTAssertEqual(self.sut.accountsViewData.headerViewData?.totalPlanValue, AccountResponse.mockData.totalPlanValue)
+                expectation.fulfill()
+            }
         }
+        
+        // Then
+        sut.fetchProducts()
+        
+        wait(for: [expectation], timeout: 5)
     }
     
 //    func testFetchProductWithSuccessCallsDidFetchAccounts() throws {

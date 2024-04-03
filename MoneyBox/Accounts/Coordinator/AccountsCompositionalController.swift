@@ -18,7 +18,6 @@ class AccountsCompositionalController: AccountsCompositionalControllerProtocol {
             heightDimension: .estimated(60)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),

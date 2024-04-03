@@ -2,25 +2,29 @@ import Foundation
 import Networking
 
 struct InvestmentViewData: Hashable {
-    let planValue: Double?
-    let totalCollection: Double?
+    var planValue: Double?
+    let moneyBox: Double?
     let isFavourite: Bool?
     let name: String?
     let pngImageUrl: String?
     let friendlyName: String?
     let productHexCode: String?
-    let contributionsNet: Double?
+    var contributionsNet: Double?
     let earningsNet: Double?
     let earningsAsPercentage: Double?
     let assetBox: String?
     let productID: Int?
+    
+    static var mockData: InvestmentViewData {
+        return .init(planValue: 90, moneyBox: 0, isFavourite: false, name: "", pngImageUrl: "", friendlyName: "", productHexCode: "", contributionsNet: 0, earningsNet: 0, earningsAsPercentage: 0, assetBox: "", productID: 0)
+    }
 }
 
 extension ProductResponse {
     var asViewData: InvestmentViewData {
         return .init(
             planValue: planValue,
-            totalCollection: product?.totalCollection,
+            moneyBox: moneybox,
             isFavourite: isFavourite,
             name: product?.name,
             pngImageUrl: product?.pngImageUrl,
@@ -30,7 +34,7 @@ extension ProductResponse {
             earningsNet: investorAccount?.earningsNet,
             earningsAsPercentage: investorAccount?.earningsAsPercentage,
             assetBox: assetBox?.title,
-            productID: product?.id
+            productID: id
         )
     }
 }

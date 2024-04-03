@@ -14,10 +14,25 @@ final class AccountsViewController: UIViewController {
         return header
     }()
     
+    lazy var promotionsBox: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkAccent
+        view.layer.shadowColor = UIColor.gray.cgColor
+        view.layer.shadowOpacity = 0.25
+        view.layer.shadowOffset = CGSize(width: 0, height: 0)
+        view.layer.shadowRadius = 4
+        view.layer.cornerRadius = 10
+        view.layer.masksToBounds = false
+        view.isAccessibilityElement = false
+        view.shouldGroupAccessibilityChildren = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(
             frame: .zero,
-            collectionViewLayout: viewModel.compositionalLayout
+            collectionViewLayout: accountsCompositionalController.compositionalLayout
         )
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(AccountCell.self, forCellWithReuseIdentifier: AccountCell.reuseIdentifier)
@@ -35,6 +50,8 @@ final class AccountsViewController: UIViewController {
         collectionView.isScrollEnabled = false
         collectionView.delegate = self
         collectionView.backgroundColor = .white
+        collectionView.isAccessibilityElement = false
+        collectionView.shouldGroupAccessibilityChildren = true
         return collectionView
     }()
     
@@ -75,13 +92,19 @@ final class AccountsViewController: UIViewController {
     private func setupView() {
         view.addSubview(header)
         view.addSubview(collectionView)
+        view.addSubview(promotionsBox)
         
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             header.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             header.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
-            collectionView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 32),
+            promotionsBox.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 32),
+            promotionsBox.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            promotionsBox.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            promotionsBox.heightAnchor.constraint(equalToConstant: 200),
+            
+            collectionView.topAnchor.constraint(equalTo: promotionsBox.bottomAnchor, constant: 16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.heightAnchor.constraint(equalToConstant: 250),
@@ -93,15 +116,20 @@ extension AccountsViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let selectedItem = accountsCompositionalController.dataSource.itemIdentifier(for: indexPath) {
-            print("Selected item: \(selectedItem)")
-            navigateToIndivudualAccount(account: selectedItem)
+            navigateToIndivdualAccount(account: selectedItem)
         }
     }
     
-    func navigateToIndivudualAccount(account: InvestmentViewData) {
+    func navigateToIndivdualAccount(account: InvestmentViewData) {
         navigationItem.title = ""
         navigationController?.pushViewController(
-            IndividualAccountViewController(account: account),
+            IndividualAccountViewController(
+                viewModel: 
+                    IndividualAccountViewModel(
+                    dataProvider: viewModel.dataProvider,
+                    account: account
+                )
+            ),
             animated: true
         )
     }

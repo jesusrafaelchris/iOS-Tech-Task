@@ -4,16 +4,20 @@ import Networking
 protocol AccountsViewModelProtocol: AnyObject {
     func fetchProducts()
     var didFetchAccounts: (() -> Void)? { get set }
+    var onFetchError: ((String?) -> Void)? { get set }
     var accountsViewData: AccountViewData { get }
-    var compositionalLayout: UICollectionViewCompositionalLayout { get set }
+    var dataProvider: DataProviderProtocol { get }
+    func greetingForTime() -> String
 }
 
 final class AccountsViewModel: AccountsViewModelProtocol {
     
-    private let dataProvider: DataProviderProtocol
+    let dataProvider: DataProviderProtocol
     private let user: LoginResponse.User
     
     var didFetchAccounts: (() -> Void)?
+    
+    var onFetchError: ((String?) -> Void)?
 
     var accountsViewData = AccountViewData() {
         didSet {
@@ -36,7 +40,7 @@ final class AccountsViewModel: AccountsViewModelProtocol {
             case .success(let model):
                 strongSelf.updateAccountViewData(with: model)
             case .failure(let failure):
-                print(failure.message)
+                strongSelf.onFetchError?(failure.message)
             }
         }
     }
@@ -56,7 +60,7 @@ final class AccountsViewModel: AccountsViewModelProtocol {
         return "\(greetingForTime()), \(name)"
     }
     
-    private func greetingForTime() -> String {
+    func greetingForTime() -> String {
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: Date())
 
@@ -69,36 +73,4 @@ final class AccountsViewModel: AccountsViewModelProtocol {
             return "Good evening"
         }
     }
-    
-    var compositionalLayout: UICollectionViewCompositionalLayout = {
-        
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(60)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 4, leading: 4, bottom: 4, trailing: 4)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(60)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.interItemSpacing = .fixed(8)
-        
-        let headerSize = NSCollectionLayoutSize(
-             widthDimension: .fractionalWidth(1),
-             heightDimension: .absolute(50)
-         )
-         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-             layoutSize: headerSize,
-             elementKind: UICollectionView.elementKindSectionHeader,
-             alignment: .top
-         )
-         
-         let section = NSCollectionLayoutSection(group: group)
-         section.boundarySupplementaryItems = [sectionHeader]
-         
-         return UICollectionViewCompositionalLayout(section: section)
-    }()
 }

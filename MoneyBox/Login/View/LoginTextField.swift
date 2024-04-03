@@ -1,6 +1,6 @@
 import UIKit
 
-protocol LoginTextFieldDelegate: AnyObject {
+public protocol LoginTextFieldDelegate: AnyObject {
     func loginTextFieldDidReturn(_ textField: UITextField)
     func loginTextFieldDidChange(_ textField: UITextField)
 }
@@ -11,8 +11,8 @@ final class LoginTextField: UIView {
     
     weak var delegate: LoginTextFieldDelegate?
     
-    var text: String? {
-        return textField.text
+    var text: String {
+        return textField.text ?? ""
     }
     
     private lazy var titleLabel: UILabel = {
@@ -20,6 +20,8 @@ final class LoginTextField: UIView {
         label.textColor = .secondary
         label.font = .systemFont(ofSize: 11)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -33,6 +35,8 @@ final class LoginTextField: UIView {
         textField.layer.cornerRadius = 8
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.isAccessibilityElement = true
+        textField.accessibilityTraits = .searchField
         return textField
     }()
     
@@ -42,6 +46,8 @@ final class LoginTextField: UIView {
         label.font = .systemFont(ofSize: 11)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -52,6 +58,8 @@ final class LoginTextField: UIView {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(textField)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
+        stackView.accessibilityElements = [titleLabel, textField]
         return stackView
     }()
     
@@ -86,6 +94,8 @@ final class LoginTextField: UIView {
         textField.isSecureTextEntry = isSecure
         textField.returnKeyType = isSecure ? .done : .next
         textField.tag = tag
+        
+        setupA11y(title, isSecure)
     }
     
     func showError(error: String) {
@@ -93,6 +103,8 @@ final class LoginTextField: UIView {
         titleLabel.textColor = .red
         stackView.addArrangedSubview(errorMessage)
         errorMessage.text = error
+        
+        errorMessage.accessibilityLabel = error
     }
     
     func reset() {
@@ -100,6 +112,13 @@ final class LoginTextField: UIView {
         titleLabel.textColor = .secondary
         stackView.removeArrangedSubview(errorMessage)
         errorMessage.text = ""
+        errorMessage.accessibilityLabel = ""
+    }
+    
+    func setupA11y(_ title: String, _ isSecure: Bool) {
+        stackView.accessibilityElements = [titleLabel, textField, errorMessage]
+        textField.accessibilityLabel = isSecure ? "Password Field" : "Email Field"
+        titleLabel.accessibilityLabel = title
     }
 }
 

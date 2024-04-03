@@ -2,14 +2,14 @@ import UIKit
 
 final class IndividualAccountViewController: UIViewController {
     
-    private let viewModel: IndividualAccountViewModelProtocol
+    private var viewModel: IndividualAccountViewModelProtocol
     
-    private lazy var colourBackground: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = UIColor(hex: viewModel.account.productHexCode ?? "000000")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    private lazy var colourBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(hex: viewModel.account.productHexCode ?? "000000")
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isAccessibilityElement = false
+        return view
     }()
     
     private lazy var totalValueTitle: UILabel = {
@@ -18,6 +18,9 @@ final class IndividualAccountViewController: UIViewController {
         label.font = .systemFont(ofSize: 14)
         label.text = "TOTAL BALANCE"
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
+        label.accessibilityLabel = "TOTAL BALANCE"
         return label
     }()
     
@@ -26,6 +29,9 @@ final class IndividualAccountViewController: UIViewController {
         label.textColor = .darkAccent
         label.attributedText = viewModel.account.planValue?.formattedBalance(biggerFontSize: 40, smallerFontSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
+        label.accessibilityLabel = "\(viewModel.account.planValue ?? 0)"
         return label
     }()
     
@@ -35,6 +41,8 @@ final class IndividualAccountViewController: UIViewController {
         label.font = .boldSystemFont(ofSize: 14)
         label.text = "Earning \(viewModel.account.earningsAsPercentage ?? 0.0)% APR"
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -47,7 +55,11 @@ final class IndividualAccountViewController: UIViewController {
         configuration.title = "Add Money"
         configuration.imagePadding = 4
         let button = UIButton(configuration: configuration, primaryAction: nil)
+        button.addTarget(self, action: #selector(addMoney), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
+        button.accessibilityLabel = "Add Money"
         return button
     }()
     
@@ -60,15 +72,12 @@ final class IndividualAccountViewController: UIViewController {
         configuration.title = "Withdraw"
         configuration.imagePadding = 4
         let button = UIButton(configuration: configuration, primaryAction: nil)
-        button.addTarget(self, action: #selector(add10Pounds), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
+        button.accessibilityLabel = "Withdraw Money"
         return button
     }()
-    
-    @objc
-    func add10Pounds() {
-        viewModel.addTenPounds()
-    }
     
     private lazy var upperStackView: UIStackView = {
         let stackView = UIStackView()
@@ -89,6 +98,7 @@ final class IndividualAccountViewController: UIViewController {
         stackView.layer.masksToBounds = false
         stackView.layoutMargins = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -100,6 +110,7 @@ final class IndividualAccountViewController: UIViewController {
         stackView.addArrangedSubview(addMoneyButton)
         stackView.addArrangedSubview(withdrawMoneyButton)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -110,6 +121,7 @@ final class IndividualAccountViewController: UIViewController {
         stackView.spacing = 8
         stackView.addArrangedSubview(buttonStackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -126,10 +138,25 @@ final class IndividualAccountViewController: UIViewController {
         super.viewDidLoad()
         setupNavBar()
         setupView()
-        updateUI()
+        
+        viewModel.didAddMoney = { [weak self] amount in
+            self?.animateLabelChange()
+        }
     }
     
-    func updateUI() {
+    @objc func addMoney() {
+        viewModel.addMoney(amount: 10)
+    }
+    
+    func animateLabelChange() {
+        let animation = CATransition()
+        animation.duration = 0.2
+        animation.type = .fade
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        totalValueLabel.layer.add(animation, forKey: "changeTextTransition")
+        let newPlanValue = viewModel.increaseMoneyAmount(amount: 10)
+        totalValueLabel.attributedText = newPlanValue.formattedBalance(biggerFontSize: 40, smallerFontSize: 20)
     }
     
     func setupView() {
@@ -159,6 +186,8 @@ final class IndividualAccountViewController: UIViewController {
     
     func setupNavBar() {
         navigationItem.title = viewModel.account.friendlyName
+        navigationItem.accessibilityLabel = viewModel.account.friendlyName
+        navigationItem.accessibilityTraits = .header
         navigationController?.navigationBar.barTintColor = .clear
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]

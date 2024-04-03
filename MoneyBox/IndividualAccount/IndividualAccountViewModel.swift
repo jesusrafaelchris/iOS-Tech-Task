@@ -2,14 +2,20 @@ import Foundation
 import Networking
 
 protocol IndividualAccountViewModelProtocol {
-    func addTenPounds()
+    func addMoney(amount: Int)
     var account: InvestmentViewData { get set }
+    var didAddMoney: ((Double?) -> Void)? { get set }
+    var addMoneyFailure: ((String?) -> Void)? { get set }
+    func increaseMoneyAmount(amount: Int) -> Double
 }
 
 final class IndividualAccountViewModel: IndividualAccountViewModelProtocol {
     
     private let dataProvider: DataProviderProtocol
     var account: InvestmentViewData
+    
+    var didAddMoney: ((Double?) -> Void)?
+    var addMoneyFailure: ((String?) -> Void)?
     
     init(
         dataProvider: DataProviderProtocol,
@@ -19,16 +25,23 @@ final class IndividualAccountViewModel: IndividualAccountViewModelProtocol {
         self.account = account
     }
     
-    func addTenPounds() {
+    func addMoney(amount: Int) {
         guard let productID = account.productID else { return }
-        let request = OneOffPaymentRequest(amount: 10, investorProductID: productID)
-        dataProvider.addMoney(request: request) { result in
+        let request = OneOffPaymentRequest(amount: amount, investorProductID: productID)
+        dataProvider.addMoney(request: request) { [weak self] result in
             switch result {
             case .success(let success):
-                print(success)
+                self?.didAddMoney?(success.moneybox)
             case .failure(let failure):
-                print(failure)
+                self?.addMoneyFailure?(failure.message)
             }
         }
+    }
+    
+    func increaseMoneyAmount(amount: Int) -> Double {
+        let currentPlanValue = account.planValue ?? 0
+        let newPlanValue = currentPlanValue + 10
+        account.planValue = newPlanValue
+        return newPlanValue
     }
 }

@@ -14,7 +14,7 @@ class AccountCell: UICollectionViewCell {
     
     private lazy var name: UILabel = {
         let label = UILabel()
-        label.textColor = .darkAccent
+        label.textColor = .black
         label.font = .boldSystemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -29,7 +29,7 @@ class AccountCell: UICollectionViewCell {
     
     private lazy var percentage: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor(red: 0.20, green: 0.78, blue: 0.35, alpha: 1.00)
+        label.textColor = .secondaryLabel//UIColor(red: 0.20, green: 0.78, blue: 0.35, alpha: 1.00)
         label.font = .boldSystemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -52,6 +52,7 @@ class AccountCell: UICollectionViewCell {
         stackView.addArrangedSubview(name)
         stackView.addArrangedSubview(percentage)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
 
@@ -96,18 +97,26 @@ class AccountCell: UICollectionViewCell {
         name.text = viewData.friendlyName
         value.attributedText = viewData.planValue?.formattedBalance(biggerFontSize: 20, smallerFontSize: 16)
         percentage.text = "\(viewData.earningsAsPercentage ?? 0.0)%"
+        setupA11y(viewData: viewData)
         
-        guard
-            let imageString = viewData.pngImageUrl,
-            let imageURL = URL(string: imageString)
-        else { return }
         Task {
             do {
-                let image = try await imageDownloader.downloadImage(from: imageURL)
+                let image = try await imageDownloader.downloadImage(from: viewData.pngImageUrl)
                 accountImage.image = image
             } catch {
-                print("Failed to download image: \(error)")
+                accountImage.image = UIImage(systemName: "banknote.fill")
             }
         }
+    }
+    
+    func setupA11y(viewData: InvestmentViewData) {
+        isAccessibilityElement = true
+        accessibilityLabel = "\(viewData.friendlyName!), \(viewData.planValue ?? 0), earning \(viewData.earningsAsPercentage ?? 0.0)"
+        accessibilityHint = "Tap to view account"
+        accountImage.isAccessibilityElement = false
+        name.isAccessibilityElement = false
+        value.isAccessibilityElement = false
+        percentage.isAccessibilityElement = false
+        chevronImageView.isAccessibilityElement = false
     }
 }

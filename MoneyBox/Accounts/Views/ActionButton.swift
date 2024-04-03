@@ -12,6 +12,8 @@ class ActionButton: UIView {
         button.backgroundColor = .accent
         button.titleLabel?.textColor = .white
         button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
         return button
     }()
     
@@ -22,6 +24,8 @@ class ActionButton: UIView {
         label.font = .systemFont(ofSize: 12)
         label.textColor = .darkAccent
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -31,6 +35,7 @@ class ActionButton: UIView {
         stackView.alignment = .center
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -63,6 +68,8 @@ class ActionButton: UIView {
     
     func configure(amount: String?, label: String?) {
         amountButton.setTitle("£\(amount ?? "0")", for: .normal)
+        amountButton.accessibilityLabel = label
         titleLabel.text = label
+        titleLabel.accessibilityLabel = label
     }
 }

@@ -1,21 +1,37 @@
 import UIKit
 
 protocol ImageDownloaderProtocol: AnyObject {
-    func downloadImage(from url: URL) async throws -> UIImage
+    func downloadImage(from url: String?) async throws -> UIImage
+}
+
+public enum ImageDownloaderError: Error {
+    case invalidURL
+    case invalidData
+    case unknown
 }
 
 class ImageDownloader: ImageDownloaderProtocol {
     
-    func downloadImage(from url: URL) async throws -> UIImage {
-        let (data, _) = try await URLSession.shared.data(from: url)
-        guard let image = UIImage(data: data) else {
-            throw ImageDownloadError.invalidImageData
-        }
-        return image
-    }
+    let urlSession: URLSessionProtocol
 
-    enum ImageDownloadError: Error {
-        case invalidImageData
+    init(urlSession: URLSessionProtocol = URLSession.shared) {
+        self.urlSession = urlSession
+    }
+    
+    func downloadImage(from url: String?) async throws -> UIImage {
+        guard let urlString = url, let URL = URL(string: urlString) else {
+            throw ImageDownloaderError.invalidURL
+        }
+        
+        do {
+            let data = try await urlSession.dataTask(with: URL)
+            guard let image = UIImage(data: data) else {
+                throw ImageDownloaderError.invalidData
+            }
+            return image
+        } catch {
+            print("Error downloading Image: \(error)")
+            throw ImageDownloaderError.unknown
+        }
     }
 }
-

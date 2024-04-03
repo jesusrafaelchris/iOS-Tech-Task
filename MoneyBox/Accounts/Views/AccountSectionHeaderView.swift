@@ -8,6 +8,7 @@ class AccountSectionHeaderView: UICollectionViewCell {
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -16,6 +17,8 @@ class AccountSectionHeaderView: UICollectionViewCell {
         label.textColor = .darkAccent
         label.font = .boldSystemFont(ofSize: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -24,6 +27,9 @@ class AccountSectionHeaderView: UICollectionViewCell {
         imageView.tintColor = .gray
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityTraits = .image
+        imageView.accessibilityLabel = "More account options"
         return imageView
     }()
     
@@ -52,5 +58,6 @@ class AccountSectionHeaderView: UICollectionViewCell {
     
     func configure(title: String) {
         titleLabel.text = title
+        titleLabel.accessibilityLabel = title
     }
 }

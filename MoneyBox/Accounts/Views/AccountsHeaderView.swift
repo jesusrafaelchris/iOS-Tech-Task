@@ -6,6 +6,9 @@ final class AccountsHeaderView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityTraits = .image
+        imageView.accessibilityLabel = "MoneyBox Logo Image"
         return imageView
     }()
     
@@ -14,6 +17,8 @@ final class AccountsHeaderView: UIView {
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -22,6 +27,8 @@ final class AccountsHeaderView: UIView {
         label.textColor = .secondaryLabel
         label.font = .systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -35,6 +42,7 @@ final class AccountsHeaderView: UIView {
         stackView.alignment = .leading
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -46,6 +54,7 @@ final class AccountsHeaderView: UIView {
         stackView.addArrangedSubview(topVerticalStackView)
         stackView.spacing = 6
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -54,6 +63,8 @@ final class AccountsHeaderView: UIView {
         label.textColor = .secondaryLabel
         label.font = .systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -61,6 +72,8 @@ final class AccountsHeaderView: UIView {
         let label = UILabel()
         label.textColor = .darkAccent
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -69,6 +82,8 @@ final class AccountsHeaderView: UIView {
         label.textColor = UIColor(red: 0.20, green: 0.78, blue: 0.35, alpha: 1.00)
         label.font = .boldSystemFont(ofSize: 16)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -77,6 +92,8 @@ final class AccountsHeaderView: UIView {
         label.textColor = .darkAccent
         label.font = .systemFont(ofSize: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
     
@@ -88,6 +105,7 @@ final class AccountsHeaderView: UIView {
         stackView.addArrangedSubview(totalEarntTitle)
         stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -99,15 +117,10 @@ final class AccountsHeaderView: UIView {
         stackView.addArrangedSubview(earntStackView)
         stackView.spacing = 80
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
-    
-    private lazy var percentageGainLabel: PercentageView = {
-        let view = PercentageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
+
     private lazy var actionStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -117,6 +130,7 @@ final class AccountsHeaderView: UIView {
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -130,11 +144,10 @@ final class AccountsHeaderView: UIView {
         stackView.setCustomSpacing(4, after: totalValueTitle)
         stackView.addArrangedSubview(valueStackView)
         stackView.setCustomSpacing(24, after: valueStackView)
-        //stackView.addArrangedSubview(percentageGainLabel)
-        //stackView.setCustomSpacing(12, after: percentageGainLabel)
         stackView.addArrangedSubview(actionStackView)
         stackView.setCustomSpacing(12, after: actionStackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isAccessibilityElement = false
         return stackView
     }()
     
@@ -173,11 +186,24 @@ final class AccountsHeaderView: UIView {
         totalValueLabel.attributedText = viewData.totalPlanValue?.formattedBalance(biggerFontSize: 40, smallerFontSize: 20)
         greetingLabel.text = viewData.greeting
         dailyMessage.text = "Little and often is the best way to save. \r\nAdd a little extra to your Moneybox."
-        percentageGainLabel.configure(percentage: "\(viewData.totalEarningsAsPercentage ?? 0.0)%")
+        setupA11y(viewData: viewData)
+        
         viewData.actions.forEach({
             let actionButton = ActionButton()
             actionButton.configure(amount: $0.amount, label: $0.label)
+            actionButton.isAccessibilityElement = true
+            actionButton.accessibilityTraits = .button
+            actionButton.accessibilityLabel = $0.label
             actionStackView.addArrangedSubview(actionButton)
         })
+    }
+    
+    private func setupA11y(viewData: AccountHeaderViewData) {
+        totalValueTitle.accessibilityLabel = "TOTAL BALANCE"
+        totalEarntLabel.accessibilityLabel = "\(viewData.totalEarnings ?? 0)"
+        totalEarntTitle.accessibilityLabel = "Earned all time"
+        totalValueLabel.accessibilityLabel = "\(viewData.totalPlanValue ?? 0)"
+        greetingLabel.accessibilityLabel = viewData.greeting
+        dailyMessage.accessibilityLabel = "Little and often is the best way to save. \r\nAdd a little extra to your Moneybox."
     }
 }

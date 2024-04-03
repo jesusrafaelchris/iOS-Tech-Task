@@ -8,6 +8,7 @@ class LoadingButton: UIButton {
         super.init(frame: frame)
         setupView()
         setupActivityIndicator()
+        setupA11y()
     }
 
     required init?(coder: NSCoder) {
@@ -21,6 +22,7 @@ class LoadingButton: UIButton {
         clipsToBounds = true
         layer.cornerRadius = 8
         activityIndicator.color = .white
+
     }
 
     private func setupActivityIndicator() {
@@ -30,9 +32,16 @@ class LoadingButton: UIButton {
         activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         activityIndicator.isHidden = true
     }
+    
+    private func setupA11y() {
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityLabel = "Log in"
+    }
 
     func showLoading() {
         setTitle(nil, for: .normal)
+        accessibilityLabel = "Loading"
         isEnabled = false
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()

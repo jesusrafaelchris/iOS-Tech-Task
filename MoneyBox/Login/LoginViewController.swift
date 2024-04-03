@@ -21,6 +21,9 @@ class LoginViewController: UIViewController {
         imageView.image = UIImage(named: "moneybox")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityTraits = .image
+        imageView.accessibilityLabel = "MoneyBox Logo"
         return imageView
     }()
     
@@ -83,6 +86,7 @@ class LoginViewController: UIViewController {
         passwordField.reset()
         loginButton.showLoading()
         
+        //viewModel.login(email: emailField.text, password: passwordField.text)
         viewModel.login(email: "test+ios@moneyboxapp.com", password: "P455word12")
         
         viewModel.didSuccessfullyLogin = { [weak self] user in
@@ -98,9 +102,9 @@ class LoginViewController: UIViewController {
             case .passwordError:
                 self?.passwordField.showError(error: error.passwordError)
             case .unknownError:
-                // show alert with error.message
-                print("login failed")
-                break
+                let alert = UIAlertController(title: error.name, message: error.message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self?.present(alert, animated: true, completion: nil)
             }
         }
     }

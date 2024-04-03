@@ -13,4 +13,8 @@ public struct OneOffPaymentResponse: Decodable {
     enum CodingKeys: String, CodingKey {
         case moneybox = "Moneybox"
     }
+    
+    static var mockData: OneOffPaymentResponse {
+        return .init(moneybox: 100)
+    }
 }

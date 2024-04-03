@@ -26,12 +26,17 @@ public struct AccountResponse: Codable {
         case productResponses = "ProductResponses"
         case accounts = "Accounts"
     }
+    
+    static var mockData: AccountResponse {
+        return .init(moneyboxEndOfTaxYear: "test", totalPlanValue: 500, totalEarnings: 0.0, totalContributionsNet: 0.0, totalEarningsAsPercentage: 0.0, productResponses: [.init(id: nil, assetBoxGlobalID: nil, planValue: nil, moneybox: nil, subscriptionAmount: nil, totalFees: nil, isSelected: nil, isFavourite: nil, collectionDayMessage: nil, wrapperID: nil, isCashBox: nil, pendingInstantBankTransferAmount: nil, assetBox: nil, product: nil, investorAccount: nil, personalisation: nil, contributions: nil, moneyboxCircle: nil, isSwitchVisible: nil, state: nil, dateCreated: nil)], accounts: nil)
+    }
 }
 
 // MARK: - Account
 public struct Account: Codable {
     public let type: String?
     public let name: String?
+    public let productID: String?
     public let deepLinkIdentifier: String?
     public let wrapper: Wrapper?
     public let milestone: Milestone?
@@ -44,6 +49,11 @@ public struct Account: Codable {
         case wrapper = "Wrapper"
         case milestone = "Milestone"
         case hasCollections = "HasCollections"
+        case productID = "Id"
+    }
+    
+    static var mockData: Account {
+        return .init(type: "", name: "", productID: "", deepLinkIdentifier: "", wrapper: nil, milestone: nil, hasCollections: nil)
     }
 }
 

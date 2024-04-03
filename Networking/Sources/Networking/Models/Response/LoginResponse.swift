@@ -35,4 +35,21 @@ public struct LoginResponse: Decodable {
             case lastName = "LastName"
         }
     }
+    
+    static var mockUser: User {
+        return .init(
+            firstName: "Michael",
+            lastName: "Jordan"
+        )
+    }
+    
+    static var mockData: LoginResponse {
+        return .init(session: .init(
+            bearerToken: "GuQfJPpjUyJH10Og+hS9c0ttz4q2ZoOnEQBSBP2eAEs="),
+            user: .init(
+                firstName: "Michael",
+                lastName: "Jordan"
+            )
+        )
+    }
 }

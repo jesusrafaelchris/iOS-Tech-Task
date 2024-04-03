@@ -73,7 +73,7 @@ final class AccountsViewController: UIViewController {
         }
     }
     
-    func updateUI(for state: FetchState) {
+    private func updateUI(for state: FetchState) {
         switch state {
         case .loading:
             self.showSpinner(onView: view)
@@ -84,7 +84,7 @@ final class AccountsViewController: UIViewController {
         }
     }
 
-    func configureData() {
+    private func configureData() {
         removeSpinner()
         guard let headerViewData = viewModel.accountsViewData.headerViewData else { return }
         header.configure(viewData: headerViewData)
@@ -95,7 +95,7 @@ final class AccountsViewController: UIViewController {
         setupView()
     }
     
-    func showErrorAlert(message: String?) {
+    private func showErrorAlert(message: String?) {
         removeSpinner()
         let alert = UIAlertController(title: "Oops!", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -133,7 +133,7 @@ extension AccountsViewController: UICollectionViewDelegate {
         }
     }
     
-    func navigateToIndivdualAccount(account: InvestmentViewData) {
+    private func navigateToIndivdualAccount(account: InvestmentViewData) {
         navigationItem.title = ""
         navigationController?.pushViewController(
             IndividualAccountViewController(

@@ -147,8 +147,8 @@
 		804F87622BBB16A300D8140A /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				B228EA692880B30B00B35F16 /* LoginViewController.swift */,
-				804F87602BBB169D00D8140A /* LoginViewModel.swift */,
+				804F87AD2BBD9B6C00D8140A /* ViewController */,
+				804F87AE2BBD9B7400D8140A /* ViewModel */,
 				804F875A2BBB09EC00D8140A /* View */,
 			);
 			path = Login;
@@ -261,6 +261,22 @@
 				804F879D2BBCD1AA00D8140A /* IndividualAccountViewModelTests.swift */,
 			);
 			path = IndividualAccount;
+			sourceTree = "<group>";
+		};
+		804F87AD2BBD9B6C00D8140A /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B228EA692880B30B00B35F16 /* LoginViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		804F87AE2BBD9B7400D8140A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				804F87602BBB169D00D8140A /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		B2CA46BF279350880041B3A5 = {

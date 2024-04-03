@@ -136,17 +136,33 @@ final class IndividualAccountViewController: UIViewController {
         super.viewDidLoad()
         setupNavBar()
         setupView()
-        
+        handleDidAddMoney()
+        handleAddMoneyFailure()
+    }
+    
+    private func handleDidAddMoney() {
         viewModel.didAddMoney = { [weak self] amount in
             self?.animateLabelChange()
         }
+    }
+    
+    private func handleAddMoneyFailure() {
+        viewModel.addMoneyFailure = { [weak self] error in
+            self?.showErrorAlert(error: error)
+        }
+    }
+    
+    private func showErrorAlert(error: String?) {
+        let alert = UIAlertController(title: "Oops!", message: error, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func addMoney() {
         viewModel.addMoney(amount: 10)
     }
     
-    func animateLabelChange() {
+    private func animateLabelChange() {
         let animation = CATransition()
         animation.duration = 0.2
         animation.type = .fade
@@ -157,7 +173,7 @@ final class IndividualAccountViewController: UIViewController {
         totalValueLabel.attributedText = newPlanValue.formattedBalance(biggerFontSize: 40, smallerFontSize: 20)
     }
     
-    func setupView() {
+    private func setupView() {
         view.backgroundColor = .white
         view.addSubview(colourBackground)
         view.addSubview(upperStackView)
@@ -182,7 +198,7 @@ final class IndividualAccountViewController: UIViewController {
         ])
     }
     
-    func setupNavBar() {
+    private func setupNavBar() {
         navigationItem.title = viewModel.account.friendlyName
         navigationItem.accessibilityLabel = viewModel.account.friendlyName
         navigationItem.accessibilityTraits = .header

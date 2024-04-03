@@ -12,7 +12,7 @@ public enum ImageDownloaderError: Error {
 
 class ImageDownloader: ImageDownloaderProtocol {
     
-    let urlSession: URLSessionProtocol
+    private var urlSession: URLSessionProtocol
 
     init(urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession

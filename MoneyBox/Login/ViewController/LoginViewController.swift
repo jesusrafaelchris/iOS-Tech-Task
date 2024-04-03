@@ -92,14 +92,14 @@ class LoginViewController: UIViewController {
         //viewModel.login(email: "test+ios@moneyboxapp.com", password: "P455word12")
     }
     
-    func handleSuccessfulLogin() {
+    private func handleSuccessfulLogin() {
         viewModel.didSuccessfullyLogin = { [weak self] user in
             self?.loginButton.hideLoading()
             self?.navigateToAccounts(user: user)
         }
     }
     
-    func handleLoginErrors() {
+    private func handleLoginErrors() {
         viewModel.onLoginError = { [weak self] error in
             self?.loginButton.hideLoading()
             switch error.loginError {
